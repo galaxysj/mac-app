@@ -20,7 +20,7 @@ jobs:
         run: pip install pyinstaller
 
       - name: Build Mac App
-        run: pyinstaller --onefile --noconsole --icon=study.ico --name=학습폰 학습폰.py
+        run: pyinstaller --onefile --windowed --icon=study.icns --name=학습폰 학습폰.py
 
 
       - name: Upload build artifact
