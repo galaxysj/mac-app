@@ -8,6 +8,9 @@ import threading
 from tkinter import simpledialog
 import time
 from time import sleep
+from tkinter import messagebox
+
+
 
 
 
@@ -57,7 +60,7 @@ def start_thread():
             "com.google.android.apps.bard"
         ]
 
-        total_steps = 4 + len(apps_to_delete)  # 다운로드 2 + 압축해제 1 + ADB 시작 1 + 앱 삭제 갯수
+        total_steps = 4 + len(apps_to_delete)  # 다운로드 2 + 압축해제 1 + ./adb 시작 1 + 앱 삭제 갯수
 
         current_step = 0
 
@@ -74,13 +77,13 @@ def start_thread():
             
             
             
-            subprocess.run(f"cd platform-tools & adb start-server", shell=True)
+            subprocess.run(f"cd platform-tools && ./adb start-server", shell=True)
             update_progress()
 
             root.after(0, lambda: update_label("앱 삭제 중..."))
     
             for package in apps_to_delete:
-                subprocess.run(f'cd platform-tools & adb shell pm uninstall -k --user 0 {package}', shell=True)
+                subprocess.run(f'cd platform-tools && ./adb shell pm uninstall -k --user 0 {package}', shell=True)
                 update_progress()
                 root.update_idletasks()
                 time.sleep(0.1)
@@ -148,7 +151,7 @@ def wifistart():
             "com.samsung.android.app.omcage"
         ]
 
-        total_steps = 5 + len(apps_to_delete)  # 다운로드 2 + 압축해제 1 + ADB 시작 1 + 앱 삭제 갯수
+        total_steps = 5 + len(apps_to_delete)  # 다운로드 2 + 압축해제 1 + ./adb 시작 1 + 앱 삭제 갯수
 
         current_step = 0
 
@@ -163,13 +166,13 @@ def wifistart():
 
         try:
             
-            subprocess.run(f"cd platform-tools & adb start-server", shell=True)
+            subprocess.run(f"cd platform-tools && ./adb start-server", shell=True)
             update_progress()
 
 
             root.after(0, lambda: update_label("앱 삭제 중..."))
             subprocess.run(
-                f'cd platform-tools & adb pair {paddr}',
+                f'cd platform-tools && ./adb pair {paddr}',
                 input=code + "\n",
                 text=True,
                 shell=True
@@ -178,12 +181,12 @@ def wifistart():
             
             update_progress()
             for package in apps_to_delete:
-                subprocess.run(f'cd platform-tools & adb shell pm uninstall -k --user 0 {package}', shell=True)
+                subprocess.run(f'cd platform-tools && ./adb shell pm uninstall -k --user 0 {package}', shell=True)
                 update_progress()
                 root.update_idletasks()
                 time.sleep(0.1)
                 
-            subprocess.run(f'cd platform-tools & adb disconnect & adb kill-server', shell=True)
+            subprocess.run(f'cd platform-tools && ./adb disconnect && ./adb kill-server', shell=True)
 
         except Exception as e:
             root.after(0, lambda e=e: showerror("오류", f"{e}"))
@@ -233,7 +236,7 @@ def recover_thread():
             "com.samsung.android.app.omcage"
         ]
 
-        total_steps = 4 + len(apps_to_recover)  # 다운로드 2 + 압축해제 1 + ADB 시작 1 + 복구 갯수
+        total_steps = 4 + len(apps_to_recover)  # 다운로드 2 + 압축해제 1 + ./adb 시작 1 + 복구 갯수
 
         current_step = 0
 
@@ -249,18 +252,18 @@ def recover_thread():
         try:
             
             
-            subprocess.run(f"cd platform-tools & adb start-server", shell=True)
+            subprocess.run(f"cd platform-tools && ./adb start-server", shell=True)
             update_progress()
 
 
             root.after(0, lambda: update_label("복구 중..."))
             
             for package in apps_to_recover:
-                subprocess.run(f'cd platform-tools & adb shell pm install-existing --user 0 {package}', shell=True)
+                subprocess.run(f'cd platform-tools && ./adb shell pm install-existing --user 0 {package}', shell=True)
                 update_progress()
                 root.update_idletasks()
                 time.sleep(0.1)
-            subprocess.run(f'cd platform-tools & adb disconnect & adb kill-server', shell=True)
+            subprocess.run(f'cd platform-tools && ./adb disconnect && ./adb kill-server', shell=True)
 
         except Exception as e:
             root.after(0, lambda e=e: showerror("오류", f"{e}"))
@@ -317,7 +320,7 @@ def wifirec():
         ]
         
         
-        total_steps = 5 + len(apps_to_recover)  # 다운로드 2 + 압축해제 1 + ADB 시작 1 + 복구 갯수
+        total_steps = 5 + len(apps_to_recover)  # 다운로드 2 + 압축해제 1 + ./adb 시작 1 + 복구 갯수
 
         current_step = 0
 
@@ -333,7 +336,7 @@ def wifirec():
         try:
             
             
-            subprocess.run(f"cd platform-tools & adb start-server", shell=True)
+            subprocess.run(f"cd platform-tools && ./adb start-server", shell=True)
             update_progress()
 
             
@@ -341,7 +344,7 @@ def wifirec():
 
             root.after(0, lambda: update_label("복구 중..."))
             subprocess.run(
-                f'cd platform-tools & adb pair {paddr}',
+                f'cd platform-tools && ./adb pair {paddr}',
                 input=code + "\n",
                 text=True,
                 shell=True
@@ -350,11 +353,11 @@ def wifirec():
             
             update_progress()
             for package in apps_to_recover:
-                subprocess.run(f'cd platform-tools & adb shell pm install-existing --user 0 {package}', shell=True)
+                subprocess.run(f'cd platform-tools && ./adb shell pm install-existing --user 0 {package}', shell=True)
                 update_progress()
                 root.update_idletasks()
                 time.sleep(0.1)
-            subprocess.run(f'cd platform-tools & adb disconnect & adb kill-server', shell=True)
+            subprocess.run(f'cd platform-tools && ./adb disconnect && ./adb kill-server', shell=True)
 
         except Exception as e:
             root.after(0, lambda e=e: showerror("오류", f"{e}"))
@@ -384,7 +387,7 @@ def install_app_thread():
         root.after(0, lambda: update_label('파일 준비 중...'))
 
         try:
-            fixed_path = filename.replace("/", "\\")
+            fixed_path = filename
             filename_only = os.path.basename(fixed_path)
             temp_file = fixed_path + ".apk"
 
@@ -395,11 +398,11 @@ def install_app_thread():
 
 
             
-            subprocess.run(f"cd platform-tools & adb start-server", shell=True)
+            subprocess.run(f"cd platform-tools && ./adb start-server", shell=True)
             update_progress()
 
             root.after(0, lambda: update_label('설치 중...'))
-            subprocess.run(r'cd platform-tools & adb install "' + temp_file + '"', shell=True)
+            subprocess.run(r'cd platform-tools && ./adb install "' + temp_file + '"', shell=True)
             update_progress()
 
             # 원래 이름으로 복원
@@ -438,7 +441,7 @@ def wifiitl():
         root.after(0, lambda: update_label('파일 준비 중...'))
 
         try:
-            fixed_path = filename.replace("/", "\\")
+            fixed_path = filename
             filename_only = os.path.basename(fixed_path)
             temp_file = fixed_path + ".apk"
 
@@ -450,7 +453,7 @@ def wifiitl():
 
             root.after(0, lambda: update_label('설치 중...'))
             subprocess.run(
-                f'cd platform-tools & adb pair {paddr}',
+                f'cd platform-tools && ./adb pair {paddr}',
                 input=code + "\n",
                 text=True,
                 shell=True
@@ -459,9 +462,9 @@ def wifiitl():
             
             update_progress()
             
-            subprocess.run(r'cd platform-tools & adb install "' + temp_file + '"', shell=True)
+            subprocess.run(r'cd platform-tools && ./adb install "' + temp_file + '"', shell=True)
             update_progress()
-            subprocess.run(f'cd platform-tools & adb disconnect & adb kill-server', shell=True)
+            subprocess.run(f'cd platform-tools && ./adb disconnect && ./adb kill-server', shell=True)
 
             # 원래 이름으로 복원
             os.rename(temp_file, fixed_path)
@@ -521,8 +524,8 @@ def checkfile():
             for b in buttons:
                 b.config(state="disabled")
             update_label("준비 중...")
-            subprocess.run('cd platform-tools & adb devices', shell=True)
-            subprocess.run('cd platform-tools & adb kill-server', shell=True)
+            subprocess.run('cd platform-tools && ./adb devices', shell=True)
+            subprocess.run('cd platform-tools && ./adb kill-server', shell=True)
             update_label("준비")
             for b in buttons:
                 b.config(state="normal")
@@ -533,9 +536,9 @@ def checkfile():
                 b.config(state="disabled")
         
             steps = [
-                ('다운로드 중...', 'powershell -Command "Invoke-WebRequest -Uri https://dl.google.com/android/repository/platform-tools-latest-windows.zip -OutFile platform-tools-latest-windows.zip"'),
-                ('압축해제 중...', 'powershell -Command "Invoke-WebRequest -Uri http://stahlworks.com/dev/unzip.exe -OutFile unzip.exe"'),
-                ('압축해제 중...', 'echo A | unzip.exe platform-tools-latest-windows.zip')
+                ('다운로드 중...', 'curl -L -o platform-tools-latest-darwin.zip https://dl.google.com/android/repository/platform-tools-latest-darwin.zip'),
+                ('압축해제 중...', 'unzip platform-tools-latest-darwin.zip'),
+                ('실행권한 얻는 중...', 'cd platform-tools && chmod +x ./adb')
             ]
 
             total_steps = len(steps)
@@ -549,8 +552,8 @@ def checkfile():
                 root.after(0, lambda p=percent: progress.config(value=p))
                 time.sleep(0.1)  # GUI 갱신 대기
                 
-            subprocess.run('cd platform-tools & adb devices', shell=True)
-            subprocess.run('cd platform-tools & adb kill-server', shell=True)
+            subprocess.run('cd platform-tools && ./adb devices', shell=True)
+            subprocess.run('cd platform-tools && ./adb kill-server', shell=True)
 
             update_label("준비")
             root.after(0, lambda: progress.config(value=0))
@@ -572,8 +575,8 @@ def manual():
             for package in package_list:
                 if package.strip():
                     print("삭제:", package)
-                    subprocess.run(f'cd platform-tools & adb shell pm uninstall -k --user 0 {package.strip()}', shell=True)
-            subprocess.run(f'cd platform-tools & adb disconnect & adb kill-server', shell=True)
+                    subprocess.run(f'cd platform-tools && ./adb shell pm uninstall -k --user 0 {package.strip()}', shell=True)
+            subprocess.run(f'cd platform-tools && ./adb disconnect && ./adb kill-server', shell=True)
         finally:
             root.after(0, lambda: update_label('준비'))
 
@@ -595,7 +598,7 @@ def manualwifi():
         try:
             root.after(0, lambda: update_label('삭제 중...'))
             subprocess.run(
-                f'cd platform-tools & adb pair {paddr}',
+                f'cd platform-tools && ./adb pair {paddr}',
                 input=code + "\n",
                 text=True,
                 shell=True
@@ -605,9 +608,9 @@ def manualwifi():
             for package in package_list:
                 if package.strip():
                     print("삭제:", package)
-                    subprocess.run(f'cd platform-tools & adb shell pm uninstall -k --user 0 {package.strip()}', shell=True)
+                    subprocess.run(f'cd platform-tools && ./adb shell pm uninstall -k --user 0 {package.strip()}', shell=True)
 
-            subprocess.run(f'cd platform-tools & adb disconnect & adb kill-server', shell=True)
+            subprocess.run(f'cd platform-tools && ./adb disconnect && ./adb kill-server', shell=True)
         finally:
             root.after(0, lambda: update_label('준비'))
 
@@ -615,7 +618,7 @@ def manualwifi():
     
 #===============기본설정=================
 root = tk.Tk()
-root.title("학습폰 5.0")
+root.title("학습폰 5.0 for macOS")
 root.geometry("400x150")
 root.configure(bg="white")
 
